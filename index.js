@@ -1,8 +1,9 @@
 const express = require("express");
 const movies = require("./movies");
-const port = 3000;
+const port = 5000;
 const app = express();
 const connection = require("./config");
+const users = require("./users");
 
 // We try to connect to the Database
 connection.connect(function (err) {
@@ -45,19 +46,34 @@ app.get("/api/movies/:id", (req, res) => {
   );
 });
 
-app.get("/api/search", (req, res) => {
-  const matchingMovies = movies.filter(
-    (movie) => movie.duration <= req.query.durationMax
-  );
-  if (matchingMovies.length > 0) {
-    res.json(matchingMovies);
-  } else {
-    res.status(404).send("No movies found for this duration");
-  }
-});
+// app.get("/api/search", (req, res) => {
+//   const matchingMovies = movies.filter(
+//     (movie) => movie.duration <= req.query.durationMax
+//   );
+//   if (matchingMovies.length > 0) {
+//     res.json(matchingMovies);
+//   } else {
+//     res.status(404).send("No movies found for this duration");
+//   }
+// });
 
 app.get("/api/users", (req, res) => {
   res.status(401).send("Unauthorized");
+});
+
+app.get("/api/users/:id", (req, res) => {
+  connection.query(
+    "SELECT * from users WHERE id=?",
+    [req.params.id],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error retrieving data");
+      } else {
+        res.status(200).json(results);
+      }
+    }
+  );
 });
 
 app.listen(port, () => {

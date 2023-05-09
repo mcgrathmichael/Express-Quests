@@ -29,7 +29,27 @@ const getUserbyId = (req, res) => {
     });
 };
 
+const postUser = (req, res) => {
+  const { firstname, lastname, email, city, language } = req.body;
+  // res.send("Post route is working 🎉");
+
+  database
+    .query(
+      "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
+      [firstname, lastname, email, city, language]
+    )
+    .then(([result]) => {
+      res.location(`/api/users/${result.insertId}`).sendStatus(201);
+      // wait for it
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error saving the user");
+    });
+};
+
 module.exports = {
   getUsers,
   getUserbyId,
+  postUser,
 };
