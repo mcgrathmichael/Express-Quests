@@ -10,7 +10,7 @@ const port = process.env.APP_PORT ?? 5000;
 const welcome = (req, res) => {
   res.send("Welcome to my favourite movie list");
 };
-
+const { hashPassword } = require("./auth.js");
 app.get("/", welcome);
 
 const movieHandlers = require("./movieHandlers");
@@ -19,6 +19,9 @@ const { validateMovie } = require("./validator.js");
 const { validateUser } = require("./validator.js");
 
 app.post("/api/movies", validateMovie, movieHandlers.postMovie);
+
+app.post("/api/users", hashPassword, userHandlers.postUser);
+app.put("/api/users/:id", hashPassword, userHandlers.updateUser);
 
 app.get("/api/users", userHandlers.getUsers);
 app.get("/api/users/:id", userHandlers.getUserbyId);
