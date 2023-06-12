@@ -46,16 +46,16 @@ app.get("/api/movies/:id", (req, res) => {
   );
 });
 
-// app.get("/api/search", (req, res) => {
-//   const matchingMovies = movies.filter(
-//     (movie) => movie.duration <= req.query.durationMax
-//   );
-//   if (matchingMovies.length > 0) {
-//     res.json(matchingMovies);
-//   } else {
-//     res.status(404).send("No movies found for this duration");
-//   }
-// });
+app.get("/api/search", (req, res) => {
+  const matchingMovies = movies.filter(
+    (movie) => movie.duration <= req.query.durationMax
+  );
+  if (matchingMovies.length > 0) {
+    res.json(matchingMovies);
+  } else {
+    res.status(404).send("No movies found for this duration");
+  }
+});
 
 app.get("/api/users", (req, res) => {
   res.status(401).send("Unauthorized");

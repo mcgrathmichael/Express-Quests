@@ -15,17 +15,22 @@ app.get("/", welcome);
 
 const movieHandlers = require("./movieHandlers");
 const userHandlers = require("./userHandlers");
+const { validateMovie } = require("./validator.js");
+const { validateUser } = require("./validator.js");
+
+app.post("/api/movies", validateMovie, movieHandlers.postMovie);
+
 app.get("/api/users", userHandlers.getUsers);
 app.get("/api/users/:id", userHandlers.getUserbyId);
 app.delete("/api/movies/:id", movieHandlers.deleteMovie);
 app.delete("/api/users/:id", userHandlers.deleteUser);
 
-app.post("/api/movies", movieHandlers.postMovie);
-app.post("/api/users", userHandlers.postUser);
-app.put("/api/users/:id", userHandlers.updateUser);
+app.put("/api/users/", userHandlers.updateUser);
+app.post("/api/users", validateUser, userHandlers.postUser);
+app.put("/api/users/:id", validateUser, userHandlers.updateUser);
 app.get("/api/movies", movieHandlers.getMovies);
 app.get("/api/movies/:id", movieHandlers.getMovieById);
-app.put("/api/movies/:id", movieHandlers.updateMovie);
+app.put("/api/movies/:id", validateMovie, movieHandlers.updateMovie);
 app.listen(port, (err) => {
   if (err) {
     console.error("Something bad happened");
