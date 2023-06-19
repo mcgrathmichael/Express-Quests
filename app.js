@@ -15,33 +15,29 @@ const welcome = (req, res) => {
 
 app.get("/", welcome);
 
-const isItMeJesus = (req, res) => {
-  if (
-    req.body.email === "jesus@sky.com" &&
-    req.body.password === "mypassword"
-  ) {
-    res.send("open the gates");
-  } else {
-    res.sendStatus(401);
-  }
-};
+// const isItMeJesus = (req, res) => {
+//   if (
+//     req.body.email === "jesus@sky.com" &&
+//     req.body.password === "mypassword"
+//   ) {
+//     res.send("open the gates");
+//   } else {
+//     res.sendStatus(401);
+//   }
+// };
 
 const movieHandlers = require("./movieHandlers");
 const { validateMovie } = require("./validator.js");
 const { validateUser } = require("./validator.js");
+app.post("/api/users", hashPassword, userHandlers.postUser);
+app.put("/api/users/:id", hashPassword, userHandlers.updateUser);
 
 app.get("/api/users", userHandlers.getUsers);
 app.get("/api/users/:id", userHandlers.getUserbyId);
 app.get("/api/movies", movieHandlers.getMovies);
 app.get("/api/movies/:id", movieHandlers.getMovieById);
 
-app.post("/api/login", isItMeJesus);
-
-app.post(
-  "/api/login",
-  userHandlers.getUserByEmailWithPasswordAndPassToNext,
-  verifyPassword
-);
+// app.post("/api/login", isItMeJesus);
 
 app.post(
   "/api/login",
@@ -52,9 +48,6 @@ app.post(
 app.use(verifyToken);
 
 app.post("/api/movies", validateMovie, movieHandlers.postMovie);
-
-app.post("/api/users", hashPassword, userHandlers.postUser);
-app.put("/api/users/:id", hashPassword, userHandlers.updateUser);
 
 app.delete("/api/movies/:id", movieHandlers.deleteMovie);
 app.delete("/api/users/:id", userHandlers.deleteUser);

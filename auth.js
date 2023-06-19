@@ -38,7 +38,7 @@ const verifyPassword = (req, res) => {
         delete req.user.hashedPassword;
         res.send({ token, user: req.user });
       } else {
-        res.sendStatus(401);
+        res.sendStatus(404);
       }
     })
     .catch((err) => {
@@ -64,6 +64,7 @@ const verifyToken = (req, res, next) => {
     res.sendStatus(401);
   }
 };
+
 module.exports = {
   hashPassword,
   verifyPassword,
