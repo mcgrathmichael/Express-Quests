@@ -29,15 +29,11 @@ app.get("/", welcome);
 const movieHandlers = require("./movieHandlers");
 const { validateMovie } = require("./validator.js");
 const { validateUser } = require("./validator.js");
-app.post("/api/users", hashPassword, userHandlers.postUser);
-app.put("/api/users/:id", hashPassword, userHandlers.updateUser);
 
 app.get("/api/users", userHandlers.getUsers);
 app.get("/api/users/:id", userHandlers.getUserbyId);
 app.get("/api/movies", movieHandlers.getMovies);
 app.get("/api/movies/:id", movieHandlers.getMovieById);
-
-// app.post("/api/login", isItMeJesus);
 
 app.post(
   "/api/login",
@@ -46,6 +42,9 @@ app.post(
 );
 
 app.use(verifyToken);
+
+app.post("/api/users", hashPassword, userHandlers.postUser);
+app.put("/api/users/:id", hashPassword, userHandlers.updateUser);
 
 app.post("/api/movies", validateMovie, movieHandlers.postMovie);
 
